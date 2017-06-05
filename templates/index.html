@@ -43,9 +43,9 @@
 
 	</div>
 	<iframe id="jupyter" src="{{url_for('.jupyter')}}" style="opacity:.95; z-index:2; width:50%; height:75%; position:absolute; top:15%; left:20 ;margin:0;padding:0;" ></iframe>
-	<div style="background-color:white; padding: 1px 2px; opacity:.95;  border: 1px; z-index:3; position:absolute; top:11%; left:24">
-	<button class="deliverybutton" id="showcode" name="showcode" type="button" >Show Code</button>
-	<button class="deliverybutton"  id="hidecode" name="hidecode" type="button" >Hide Code</button>
+	<div style="background-color:white; padding: 1px 2px; opacity:.95;  border: 1px; z-index:3; position:absolute; top:10%; left:24">
+	<button class="showbutton" id="showcode" name="showcode" value="selected" type="button" >Show Code</button>
+	<button class="deliverybutton"  id="hidecode" name="hidecode" value="unselected" type="button" >Hide Code</button>
 	</div>
 
 	<script> 
@@ -56,6 +56,13 @@
 	$('#showcode').click(function(){
 	
 	jupyter = $("#jupyter").contents();
+	
+	$('#showcode').attr("value","selected");
+	$('#hidecode').attr("value","unselected");
+	
+	$('#showcode').css({ "background-color":  "#008CBA", "color":"white" });
+	$('#hidecode').css({ "background-color":  "#e7e7e7", "color":"black" });
+	
 
 	jupyter.find('.input_area').show();
 	jupyter.find('.input_prompt').show();
@@ -64,6 +71,14 @@
 	});
 	
 	$('#hidecode').click(function(){
+	
+	$('#showcode').attr("value","selected");
+	$('#hidecode').attr("value","unselected");
+	
+	$('#hidecode').css({ "background-color":  "#008CBA", "color":"white" });
+	$('#showcode').css({ "background-color":  "#e7e7e7", "color":"black" });
+	
+
 		
 	jupyter = $("#jupyter").contents();
 	

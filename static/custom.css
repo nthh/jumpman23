@@ -2,7 +2,17 @@
     background-color: #e7e7e7; 
 	color: black;
     border: none;
-
+    padding: 7px 16px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 12px;
+}
+.showbutton {
+    background-color: #008CBA; 
+	color: white;
+    border: none;
+    padding: 7px 16px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
@@ -12,7 +22,7 @@
     background-color: #e7e7e7; 
 	color: black;
     border: none;
-   
+    padding: 7px 16px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
@@ -22,7 +32,7 @@
     background-color: #e7e7e7; 
 	color: black;
     border: none;
- 
+    padding: 7px 16px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
