@@ -1,0 +1,1 @@
+jupyter nbconvert --to html jm23-nyc.ipynb

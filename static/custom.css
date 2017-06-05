@@ -1,0 +1,30 @@
+.deliverybutton {
+    background-color: #e7e7e7; 
+	color: black;
+    border: none;
+
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 12px;
+}
+.chorobutton {
+    background-color: #e7e7e7; 
+	color: black;
+    border: none;
+   
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 12px;
+}
+.heatmapbutton {
+    background-color: #e7e7e7; 
+	color: black;
+    border: none;
+ 
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 12px;
+}

@@ -1,0 +1,241 @@
+<html>
+<head>
+
+   <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+	<script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
+  <link rel="stylesheet" href="{{url_for('static', filename='custom.css')}}"> 
+    <link rel="stylesheet" href="{{url_for('static', filename='demo.css')}}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.heat/0.2.0/leaflet-heat.js"></script>
+
+	
+</head>
+
+
+
+<body>
+   
+    <div style="z-index:1" id="llmap"></div>
+	
+	<div style=" z-index:4; position:absolute; padding: 5px 5px; background-color:white; opacity:.95; border: 1px; top:15%; right:10%;">
+	<button class="deliverybutton" id="pickupHeatmap" name="pickup" type="button" value="selected" >Pickups</button>
+	<button class="deliverybutton"  id="dropoffHeatmap" name="dropoff" type="button" value="unselected" >Dropoffs</button>
+
+	<fieldset>
+		<a>Vehicle Type</a>
+		<br>
+		{% for vehicle in vehicle_types %}
+		 <input class="rb" type="radio" name="{{vehicle}}" value="/vehicle_type/{{vehicle}}" > {{vehicle}}
+		<br>
+		{% endfor %}
+		
+		<a>Place Category</a>
+		<br>
+		{% for place_cat in place_categories %}
+		 <input class="rb" type="radio" name="{{place_cat}}" value="/place_category/{{place_cat}}" > {{place_cat}}
+		<br>
+		{% endfor %}
+		
+		
+		
+	</fieldset>
+
+	</div>
+	<iframe id="jupyter" src="{{url_for('.jupyter')}}" style="opacity:.95; z-index:2; width:50%; height:75%; position:absolute; top:15%; left:20 ;margin:0;padding:0;" ></iframe>
+	<div style="background-color:white; padding: 1px 2px; opacity:.95;  border: 1px; z-index:3; position:absolute; top:11%; left:24">
+	<button class="deliverybutton" id="showcode" name="showcode" type="button" >Show Code</button>
+	<button class="deliverybutton"  id="hidecode" name="hidecode" type="button" >Hide Code</button>
+	</div>
+
+	<script> 
+	
+	
+	var jupyter;
+	
+	$('#showcode').click(function(){
+	
+	jupyter = $("#jupyter").contents();
+
+	jupyter.find('.input_area').show();
+	jupyter.find('.input_prompt').show();
+	jupyter.find('.output_prompt').show();
+	
+	});
+	
+	$('#hidecode').click(function(){
+		
+	jupyter = $("#jupyter").contents();
+	
+	jupyter.find('.input_area').hide();
+	jupyter.find('.input_prompt').hide();
+	jupyter.find('.output_prompt').hide();
+	});
+
+	
+	
+	
+	
+	BASECOORDS = [40.73002310367934,-74.02699470520021]
+
+	var map = L.map('llmap').setView(BASECOORDS, 13);
+	
+	
+	
+	
+	var heatmap;
+	var choropleth;
+	
+		heatmap = L.heatLayer([
+		[-73.9727,40.7261, 0.2], 
+		[-73.8727,40.7361, 0.5]
+	], {radius: 25}).addTo(map);
+
+	
+	
+	
+	$(".rb").change(function () {
+		$('.rb').not(this).prop('checked', false);
+    
+		createHeatmap( $("button[value='selected']").attr('name')  + $(this).val())
+
+	});
+	function createHeatmap(heatmapPath) {
+	
+	
+	
+		$.getJSON(heatmapPath, function(obj) {
+				
+					
+				var markers = obj.data.map(function(arr) {
+					return arr
+				});
+				map.removeLayer(heatmap);
+				heatmap = L.heatLayer(markers, {radius: 25})
+				heatmap.addTo(map);
+				
+				
+			});
+	};
+	
+	$('#pickupHeatmap').click(function(){
+		$(".rb").prop('checked', false);
+	
+		$('#pickupHeatmap').attr("value","selected");
+		$('#dropoffHeatmap').attr("value","unselected");
+		$('#dropoffHeatmap').css({ "background-color":  "#e7e7e7", "color":"black" });
+		$('#pickupHeatmap').css({ "background-color":  "#008CBA", "color":"white" });
+		
+		$.getJSON("/pickup_heatmap", function(obj) {
+			
+				
+			var markers = obj.data.map(function(arr) {
+				return arr
+			});
+
+			heatmap = L.heatLayer(markers, {radius: 25})
+			heatmap.addTo(map);
+			
+			
+		})
+		map.removeLayer(choropleth);
+		map.removeLayer(heatmap);
+	
+	});
+	
+	$('#dropoffHeatmap').click(function(){
+		$(".rb").prop('checked', false);
+	
+		$('#pickupHeatmap').attr("value","unselected");
+		$('#dropoffHeatmap').attr("value","selected");
+		$('#pickupHeatmap').css({ "background-color":  "#e7e7e7", "color":"black" });
+		$('#dropoffHeatmap').css({ "background-color":  "#008CBA", "color":"white" });
+	
+		$.getJSON("/dropoff_heatmap", function(obj) {
+			
+				
+			var markers = obj.data.map(function(arr) {
+				return arr
+			});
+			heatmap = L.heatLayer(markers, {radius: 25})
+			heatmap.addTo(map);
+		})
+		map.removeLayer(heatmap);
+		map.removeLayer(choropleth);
+		
+			
+	});
+	
+	
+	function makeMap() {
+		var ACCESS_TOKEN = 'pk.eyJ1IjoibmhlYXJucyIsImEiOiJjajNpejE0ZXowMGdoMzJwcG03dGF2OWtoIn0.p1ZTZW8oPGNUjJ7wUOMlDQ';
+		var MB_ATTR = 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
+				'<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+				'Imagery © <a href="http://mapbox.com">Mapbox</a>';
+		var MB_URL = 'https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=' + ACCESS_TOKEN;
+
+		
+
+		L.tileLayer(MB_URL, {attribution: MB_ATTR, id: 'mapbox.streets'}).addTo(map);
+	}
+
+	var layer = L.layerGroup();
+
+	
+	function choropleth(path) {
+		 $.getJSON( path, function(obj) {
+			
+			choropleth = L.geoJson(obj, {
+				style: style
+			}).addTo(map);
+		})
+	
+	};
+	
+	
+	
+	
+	
+	
+	$(function() {
+		makeMap();
+		choropleth('pickups_NTA');
+		});
+
+
+	
+	function getColor(d) {
+		return d > 1000 ? '#800026' :
+				d > 500  ? '#BD0026' :
+				d > 200  ? '#E31A1C' :
+				d > 100  ? '#FC4E2A' :
+				d > 50   ? '#FD8D3C' :
+				d > 20   ? '#FEB24C' :
+				d > 10   ? '#FED976' :
+							'#FFEDA0';
+	}
+
+	function style(feature) {
+		return {
+			weight: 2,
+			opacity: 1,
+			color: 'white',
+			dashArray: '3',
+			fillOpacity: 0.7,
+			fillColor: getColor(feature.properties.values)
+		};
+	}
+
+	
+
+	
+
+	map.attributionControl.addAttribution('Neighborhood Data &copy; <a href="http://opendata.cityofnewyork.us"> NYC OpenData</a>');
+
+
+
+	
+	
+	</script>
+	
+</body>
