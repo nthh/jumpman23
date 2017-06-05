@@ -2,7 +2,8 @@
     background-color: #e7e7e7; 
 	color: black;
     border: none;
-    padding: 7px 16px;
+	width: 10%;
+	height: 4%;
     text-align: center;
     text-decoration: none;
     display: inline-block;
@@ -28,13 +29,59 @@
     display: inline-block;
     font-size: 12px;
 }
-.heatmapbutton {
-    background-color: #e7e7e7; 
-	color: black;
-    border: none;
-    padding: 7px 16px;
-    text-align: center;
-    text-decoration: none;
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #e7e7e7;
+}
+
+li {
+    float: left;
+	border-right: solid #bdc0c3;
+	 border-right-width: 1px;
+}
+
+li a, .dropbtn {
     display: inline-block;
-    font-size: 12px;
+    color: black;
+    text-align: center;
+    padding: 10px 12px;
+    text-decoration: none;
+}
+
+li a:hover, .dropdown:hover .dropbtn {
+    background-color: #008CBA;
+	color: white;
+}
+
+li.dropdown {
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 5;
+}
+
+.dropdown-content a {
+    color: #e7e7e7;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+	color: black;
+    text-align: left;
+}
+
+.dropdown-content a:hover {background-color: #f1f1f1, color: black;}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+	
 }

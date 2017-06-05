@@ -6,7 +6,6 @@
 	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
   <link rel="stylesheet" href="{{url_for('static', filename='custom.css')}}"> 
     <link rel="stylesheet" href="{{url_for('static', filename='demo.css')}}">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.heat/0.2.0/leaflet-heat.js"></script>
 
 	
@@ -18,34 +17,46 @@
    
     <div style="z-index:1" id="llmap"></div>
 	
-	<div style=" z-index:4; position:absolute; padding: 5px 5px; background-color:white; opacity:.95; border: 1px; top:15%; right:8%;">
-	<button class="deliverybutton" id="pickupHeatmap" name="pickup" type="button" value="selected" >Pickups</button>
-	<button class="deliverybutton"  id="dropoffHeatmap" name="dropoff" type="button" value="unselected" >Dropoffs</button>
-
-	<fieldset>
-		<a>Vehicle Type</a>
-		<br>
-		{% for vehicle in vehicle_types %}
-		 <input class="rb" type="radio" name="{{vehicle}}" value="/vehicle_type/{{vehicle}}" > {{vehicle}}
-		<br>
-		{% endfor %}
-		
-		<a>Place Category</a>
-		<br>
-		{% for place_cat in place_categories %}
-		 <input class="rb" type="radio" name="{{place_cat}}" value="/place_category/{{place_cat}}" > {{place_cat}}
-		<br>
-		{% endfor %}
-		
-		
-		
-	</fieldset>
 
 	</div>
-	<iframe id="jupyter" src="{{url_for('.jupyter')}}" style="opacity:.95; z-index:2; width:50%; height:75%; position:absolute; top:15%; left:20 ;margin:0;padding:0;" ></iframe>
-	<div style="background-color:white; padding: 1px 2px; opacity:.95;  border: 1px; z-index:3; position:absolute; top:10%; left:24">
-	<button class="showbutton" id="showcode" name="showcode" value="selected" type="button" >Show Code</button>
-	<button class="deliverybutton"  id="hidecode" name="hidecode" value="unselected" type="button" >Hide Code</button>
+	<div style="height:80%; width:50%; padding: 1px 2px; opacity:.95;  border: 1px; z-index:6; position:absolute; top:4%; left:5%">
+	
+	<ul  style="z-index:5;">
+		<li><a href="#minus" id="minus" style="width:9.031;"  >-</a></li>
+		<li><a href="#hidecode" id="hidecode" >Hide Code</a></li>
+		<li><a class=  "heatmapbutton" href="#pickupHeatmap" id="pickupHeatmap" name="pickup" value="unselected" >Pickups</a></li>
+		<li><a class = "heatmapbutton" href="#dropoffHeatmap" id="dropoffHeatmap" name="dropoff" value="unselected" >Dropoffs</a></li>
+		<li class="dropdown">
+			<a href="javascript:void(0)" id="vehicle_type" class="dropbtn">Vehicle Type</a>
+			<div class="dropdown-content">
+			
+			{% for vehicle in vehicle_types %}
+			<a class="ddownval" id="{{vehicle}}" name="/vehicle_type/{{vehicle}}"  value="/vehicle_type/{{vehicle}}" href="#{{vehicle}}">{{vehicle}}</a>
+			{% endfor %}
+
+			</div>
+		</li>
+		
+		<li class="dropdown">
+			<a href="javascript:void(0)" id="place_category" class="dropbtn">Place Category</a>
+			<div class="dropdown-content">
+			
+			{% for place_cat in place_categories %}
+			<a  class="ddownval" id="{{place_cat}}" name="/place_category/{{place_cat}}" value="/place_category/{{place_cat}}" href="#{{place_cat}}">{{place_cat}}</a>
+			{% endfor %}
+
+			</div>
+		</li>
+	
+		
+	
+		
+	</ul>
+	
+	<br>
+	<iframe id="jupyter" src="{{url_for('.jupyter')}}" style="opacity:.95; z-index:2; height:100%; width:100%; position:absolute;border:0;margin:0;padding:0;" ></iframe>
+	
+
 	</div>
 
 	<script> 
@@ -53,45 +64,94 @@
 	
 	var jupyter;
 	
-	$('#showcode').click(function(){
 	
+	$(document).on("click",'[id^=showcode]',function(){
+
+
 	jupyter = $("#jupyter").contents();
 	
-	$('#showcode').attr("value","selected");
-	$('#hidecode').attr("value","unselected");
-	
-	$('#showcode').css({ "background-color":  "#008CBA", "color":"white" });
-	$('#hidecode').css({ "background-color":  "#e7e7e7", "color":"black" });
 	
 
 	jupyter.find('.input_area').show();
 	jupyter.find('.input_prompt').show();
 	jupyter.find('.output_prompt').show();
 	
+	$(this).text('Hide Code');
+	$(this).attr({"value":"hidecode","href":"#hidecode","id":"hidecode"});
+		
+	
 	});
 	
-	$('#hidecode').click(function(){
-	
-	$('#showcode').attr("value","selected");
-	$('#hidecode').attr("value","unselected");
-	
-	$('#hidecode').css({ "background-color":  "#008CBA", "color":"white" });
-	$('#showcode').css({ "background-color":  "#e7e7e7", "color":"black" });
-	
+	$(document).on("click",'[id^=minus]',function(){
 
-		
+
+	
+	$("#jupyter").hide();
+	$(this).attr({"value":"plus","href":"#plus","id":"plus"});
+	$(this).text("+");
+	});
+	
+	
+	$(document).on("click",'[id^=plus]',function(){
+
+
+	
+	$("#jupyter").show();
+	$(this).attr({"value":"minus","href":"#minus","id":"minus"});
+	$(this).text("-");
+	});
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	$(document).on("click",'[id^=showcode]',function(){
+
+
 	jupyter = $("#jupyter").contents();
 	
-	jupyter.find('.input_area').hide();
-	jupyter.find('.input_prompt').hide();
-	jupyter.find('.output_prompt').hide();
+	
+
+	jupyter.find('.input_area').show();
+	jupyter.find('.input_prompt').show();
+	jupyter.find('.output_prompt').show();
+	
+	$(this).text('Hide Code');
+	$(this).attr({"value":"hidecode","href":"#hidecode","id":"hidecode"});
+		
+	
+	});
+	
+	
+	
+	
+	
+	
+	$(document).on("click",'[id^=hidecode]',function(){
+		
+			
+		jupyter = $("#jupyter").contents();
+		
+		jupyter.find('.input_area').hide();
+		jupyter.find('.input_prompt').hide();
+		jupyter.find('.output_prompt').hide();
+		
+		$('#hidecode').text('Show Code');
+		$('#hidecode').attr({"value":"showcode","href":"#showcode","id":"showcode"});
+		
 	});
 
 	
 	
 	
 	
-	BASECOORDS = [40.73002310367934,-74.02699470520021]
+	BASECOORDS = [40.7341856521751,  -74.05866622924806]
 
 	var map = L.map('llmap').setView(BASECOORDS, 13);
 	
@@ -109,12 +169,35 @@
 	
 	
 	
-	$(".rb").change(function () {
-		$('.rb').not(this).prop('checked', false);
-    
-		createHeatmap( $("button[value='selected']").attr('name')  + $(this).val())
+	$(document).on("click",'[class^=ddownval]',function(){
+	
+		$('#vehicle_type').text('Vehicle Type');
+		$('#place_category').text('Place Category');
+		$('#vehicle_type').css({ "background-color":  "#e7e7e7", "color":"black" });
+		$('#place_category').css({ "background-color":  "#e7e7e7", "color":"black" });
+		
+		
+		var dropbtn = $(this).closest('div').prev();
+		
+		dropbtn.text($(this).attr("id"));
+		dropbtn.css({ "background-color":  "#008CBA", "color":"white" });
+	
+	
+
+		
+			
+		createHeatmap(  $(".heatmapbutton[value='selected']").attr('name') + $(this).attr('name'));
 
 	});
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	function createHeatmap(heatmapPath) {
 	
 	
