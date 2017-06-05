@@ -461,7 +461,7 @@ div#notebook {
 <pre>Number of orders: 5214
 Number of pickup places: 898
 Number of customers: 3192
-Number of delivers: 578
+Number of Jumpmen: 578
 Number of items: 2278
 Number of place categories: 58
 </pre>
@@ -1900,7 +1900,7 @@ tRMXecwAAAAASUVORK5CYII=
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="Merchant-performance">Merchant performance<a class="anchor-link" href="#Merchant-performance"></a></h2><p>Merchants for which users take longer to order may have menus that are not optimized for efficient ordering. These merchants can be proactively engaged to prevent the loss of merchants and/or users.</p>
-<p>The same analysis can be done for merchants that have a long wait time. Time spent waiting for the food to be ready prevents the Jumpan from making other deliveries.</p>
+<p>The same analysis can be done for merchants that have a long wait time. Time spent waiting for the food to be ready prevents the Jumpman from making other deliveries.</p>
 
 </div>
 </div>
@@ -2017,6 +2017,7 @@ Name: mean, dtype: timedelta64[ns]</pre>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="Data-quality">Data quality<a class="anchor-link" href="#Data-quality"></a></h2><p>From a general analysis, the data provided appears to have little data quality issues, but there is a high amount of data with missing item information and missing times for when the Jumpman arrived and left the pickup site.</p>
+<p>As seen in the heatmap above, there are also a few time slots that have no data present.</p>
 <p>In addition, there are 16 rows which have exact duplicates. Root cause analysis should be performed to see if this is a legitimate issue or actual orders with the same item multiple times.</p>
 
 </div>
@@ -2703,20 +2704,10 @@ dtype: int64</pre>
       <th>2010 Census Tract</th>
       <th>PUMA</th>
       <th>Neighborhood Tabulation Area (NTA)</th>
-      <th>Unnamed: 6</th>
+      <th>NTA Name</th>
     </tr>
   </thead>
   <tbody>
-    <tr>
-      <th>0</th>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>Code</td>
-      <td>Name</td>
-    </tr>
     <tr>
       <th>1</th>
       <td>Bronx</td>
