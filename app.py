@@ -32,13 +32,13 @@ def generateHeatmapData(coordType, field, name):
 
 @app.route('/dropoff_heatmap')
 def dropoff_heatmap():
-	s = df.groupby(['dropoff_lat','dropoff_lon']).size().transform(lambda x: (x ) / x.max())
+	s = df.groupby(['dropoff_lat','dropoff_lon']).size()
 	data = [ [a[0],a[1]] for a,b in s.items() ]
 	return jsonify({"data": data})
 	
 @app.route('/pickup_heatmap')
 def pickup_heatmap():
-	s = df.groupby(['pickup_lat','pickup_lon']).size().transform(lambda x: (x ) / x.max())
+	s = df.groupby(['pickup_lat','pickup_lon']).size()
 	data = [ [a[0],a[1] ] for a,b in s.items() ]
 	return jsonify({"data": data})
 
