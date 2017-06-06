@@ -218,6 +218,11 @@
 	
 	$('#pickupHeatmap').click(function(){
 		$(".rb").prop('checked', false);
+		
+		$('#vehicle_type').text('Vehicle Type');
+		$('#place_category').text('Place Category');
+		$('#vehicle_type').css({ "background-color":  "#e7e7e7", "color":"black" });
+		$('#place_category').css({ "background-color":  "#e7e7e7", "color":"black" });
 	
 		$('#pickupHeatmap').attr("value","selected");
 		$('#dropoffHeatmap').attr("value","unselected");
@@ -243,6 +248,12 @@
 	
 	$('#dropoffHeatmap').click(function(){
 		$(".rb").prop('checked', false);
+		
+		
+		$('#vehicle_type').text('Vehicle Type');
+		$('#place_category').text('Place Category');
+		$('#vehicle_type').css({ "background-color":  "#e7e7e7", "color":"black" });
+		$('#place_category').css({ "background-color":  "#e7e7e7", "color":"black" });
 	
 		$('#pickupHeatmap').attr("value","unselected");
 		$('#dropoffHeatmap').attr("value","selected");
