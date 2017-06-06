@@ -1,13 +1,12 @@
 <html>
 <head>
 
-   <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+	<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 	<script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
 	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
-  <link rel="stylesheet" href="{{url_for('static', filename='custom.css')}}"> 
-    <link rel="stylesheet" href="{{url_for('static', filename='demo.css')}}">
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.heat/0.2.0/leaflet-heat.js"></script>
-
+	<link rel="stylesheet" href="{{url_for('static', filename='custom.css')}}"> 
+	<link rel="stylesheet" href="{{url_for('static', filename='demo.css')}}">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.heat/0.2.0/leaflet-heat.js"></script>
 	
 </head>
 
@@ -16,71 +15,54 @@
 <body>
    
     <div style="z-index:1" id="llmap"></div>
-	
 
-	</div>
 	<div id="dashboard" style="height:80%; width:55%; padding: 1px 2px; opacity:.95;  border: 1px; z-index:6; position:absolute; top:4%; left:5%">
 	
-	<ul  style="z-index:5;">
-		<li><a href="#minus" id="minus" style="width:9.031;"  >-</a></li>
-		<li><a href="#hidecode" id="hidecode" >Hide Code</a></li>
-		<li><a class=  "heatmapbutton" href="#pickupHeatmap" id="pickupHeatmap" name="pickup" value="unselected" >Pickups</a></li>
-		<li><a class = "heatmapbutton" href="#dropoffHeatmap" id="dropoffHeatmap" name="dropoff" value="unselected" >Dropoffs</a></li>
-		<li class="dropdown">
-			<a href="javascript:void(0)" id="vehicle_type" class="dropbtn">Vehicle Type</a>
-			<div class="dropdown-content">
-			
-			{% for vehicle in vehicle_types %}
-			<a class="ddownval" id="{{vehicle}}" name="/vehicle_type/{{vehicle}}"  value="/vehicle_type/{{vehicle}}" href="#{{vehicle}}">{{vehicle}}</a>
-			{% endfor %}
+		<ul  style="z-index:5;">
+		
+			<li><a href="#minus" id="minus" style="width:9.031;"  >-</a></li>
+			<li><a href="#hidecode" id="hidecode" style="width:74.234;" >Hide Code</a></li>
+			<li><a class=  "heatmapbutton" href="#pickupHeatmap" id="pickupHeatmap" name="pickup" value="unselected" >Pickups</a></li>
+			<li><a class = "heatmapbutton" href="#dropoffHeatmap" id="dropoffHeatmap" name="dropoff" value="unselected" >Dropoffs</a></li>
+			<li class="dropdown">
+				<a href="javascript:void(0)" id="vehicle_type" class="dropbtn">Vehicle Type</a>
+				<div class="dropdown-content">
+				
+					{% for vehicle in vehicle_types %}
+					<a class="ddownval" id="{{vehicle}}" name="/vehicle_type/{{vehicle}}"  value="/vehicle_type/{{vehicle}}" href="#{{vehicle}}">{{vehicle}}</a>
+					{% endfor %}
 
-			</div>
-		</li>
-		
-		<li class="dropdown">
-			<a href="javascript:void(0)" id="place_category" class="dropbtn">Place Category</a>
-			<div class="dropdown-content">
+				</div>
+			</li>
 			
-			{% for place_cat in place_categories %}
-			<a  class="ddownval" id="{{place_cat}}" name="/place_category/{{place_cat}}" value="/place_category/{{place_cat}}" href="#{{place_cat}}">{{place_cat}}</a>
-			{% endfor %}
+			<li class="dropdown">
+				<a href="javascript:void(0)" id="place_category" class="dropbtn">Place Category</a>
+				<div class="dropdown-content">
+				
+					{% for place_cat in place_categories %}
+					<a  class="ddownval" id="{{place_cat}}" name="/place_category/{{place_cat}}" value="/place_category/{{place_cat}}" href="#{{place_cat}}">{{place_cat}}</a>
+					{% endfor %}
 
-			</div>
-		</li>
-	
+				</div>
+			</li>
 		
-	
+			
 		
-	</ul>
-	
-	<br>
-	<iframe id="jupyter" src="{{url_for('.jupyter')}}" style="opacity:.95; z-index:2; height:100%; width:100%; position:absolute;border:0;margin:0;padding:0;" ></iframe>
-	
+			
+		</ul>
+		
+		<br>
+		<iframe id="jupyter" src="{{url_for('.jupyter')}}" style="opacity:.95; z-index:2; height:100%; width:100%; position:absolute;border:0;margin:0;padding:0;" ></iframe>
+		
 
 	</div>
 
-	<script> 
+<script> 
 	
 	
 	var jupyter;
 	
-	
-	$(document).on("click",'[id^=showcode]',function(){
 
-
-	jupyter = $("#jupyter").contents();
-	
-	
-
-	jupyter.find('.input_area').show();
-	jupyter.find('.input_prompt').show();
-	jupyter.find('.output_prompt').show();
-	
-	$(this).text('Hide Code');
-	$(this).attr({"value":"hidecode","href":"#hidecode","id":"hidecode"});
-		
-	
-	});
 	
 	$(document).on("click",'[id^=minus]',function(){
 
@@ -100,17 +82,7 @@
 	$(this).attr({"value":"minus","href":"#minus","id":"minus"});
 	$(this).text("-");
 	});
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
 	$(document).on("click",'[id^=showcode]',function(){
 
 
@@ -127,12 +99,7 @@
 		
 	
 	});
-	
-	
-	
-	
-	
-	
+
 	$(document).on("click",'[id^=hidecode]',function(){
 		
 			
@@ -181,23 +148,12 @@
 		
 		dropbtn.text($(this).attr("id"));
 		dropbtn.css({ "background-color":  "#008CBA", "color":"white" });
-	
-	
 
-		
-			
 		createHeatmap(  $(".heatmapbutton[value='selected']").attr('name') + $(this).attr('name'));
 
 	});
 	
-	
-	
-	
-	
-	
-	
-	
-	
+
 	function createHeatmap(heatmapPath) {
 	
 	
@@ -301,11 +257,7 @@
 	
 	};
 	
-	
-	
-	
-	
-	
+
 	$(function() {
 		makeMap();
 		choropleth('pickups_NTA');
@@ -335,9 +287,6 @@
 		};
 	}
 
-	
-
-	
 
 	map.attributionControl.addAttribution('Neighborhood Data &copy; <a href="http://opendata.cityofnewyork.us"> NYC OpenData</a>');
 
@@ -345,6 +294,6 @@
 
 	
 	
-	</script>
+</script>
 	
 </body>
