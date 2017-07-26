@@ -29,10 +29,9 @@ def generateHeatmapData(coordType, field, name):
 	data = [ [a[0],a[1]] for a,b in s.items() ]
 	return jsonify({"data": data})
 	
-
 @app.route('/dropoff_heatmap')
 def dropoff_heatmap():
-	s = df.groupby(['dropoff_lat','dropoff_lon']).size()
+	s = df.groupby(['dropoff_lat','dropoff_lon']).size().transform(lambda x: (x ) / x.max())
 	data = [ [a[0],a[1]] for a,b in s.items() ]
 	return jsonify({"data": data})
 	
@@ -41,26 +40,6 @@ def pickup_heatmap():
 	s = df.groupby(['pickup_lat','pickup_lon']).size()
 	data = [ [a[0],a[1] ] for a,b in s.items() ]
 	return jsonify({"data": data})
-
-
-	
-	
-		
-
-
-def df_to_geojson(df, properties, lat='lat', lon='long', z='elev'):
-    geojson = {'type':'FeatureCollection', 'features':[]}
-    for _, row in df.iterrows():
-        feature = {'type':'Feature',
-                   'properties':{},
-                   'geometry':{'type':'Point','coordinates':[]}}
-        feature['geometry']['coordinates'] = [row[lon],row[lat]]
-        for prop in properties:
-            feature['properties'][prop] = row[prop]
-        geojson['features'].append(feature)
-    return geojson
-
-
 
 	
 #Access to stored data
@@ -109,6 +88,19 @@ def pickups_NTA(field = None,name = None):
 
 	
 	return jsonify(data);
+
+#Not used
+def df_to_geojson(df, properties, lat='lat', lon='long', z='elev'):
+    geojson = {'type':'FeatureCollection', 'features':[]}
+    for _, row in df.iterrows():
+        feature = {'type':'Feature',
+                   'properties':{},
+                   'geometry':{'type':'Point','coordinates':[]}}
+        feature['geometry']['coordinates'] = [row[lon],row[lat]]
+        for prop in properties:
+            feature['properties'][prop] = row[prop]
+        geojson['features'].append(feature)
+    return geojson
 
 if __name__ == '__main__':
     # Bind to PORT if defined, otherwise default to 5000.
